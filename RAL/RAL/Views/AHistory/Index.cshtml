@@ -1,0 +1,51 @@
+﻿@model RAL_DAL.User
+@{
+    ViewBag.Title = @Model.login + " Watch History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(function (){
+        setAHistory();
+    })
+
+    function setAHistory() 
+    {
+        mainMenuButtonItalizing("Watch History");
+        setUsernameDisplaying();
+
+        // add secondary buttons bindings
+        $('#addLi a').attr('data-target', '#AddAHistory');
+    }
+</script>
+
+<!--Notification after redirect-->
+@if (TempData.Peek("newWatcheda") != null)
+{
+    RAL_DAL.Watcheda newWatcheda = (RAL_DAL.Watcheda)TempData["newWatcheda"];
+    
+    <script type="text/javascript">
+        $(function () {
+            addEmphasis('@newWatcheda.anime.name', '@newWatcheda.startdate');
+            notif = "Anime <span class='emphasis'>" + '@newWatcheda.anime.name' + "</span> has been added to your watch history";
+            addNotification(notif);
+            scrollToAHistoryTableRow();
+        });
+    </script>
+}
+
+<div class="main-container">
+    <span id="uname-container" style="display:none">@Model.login</span>
+    <div class="page-header">
+        <h2>Anime Watching List: All Years</h2>
+    </div>
+
+    @{Html.RenderPartial("AddWatchedForm");}
+    @{Html.RenderPartial("DeleteWatchedForm");}
+
+    <div class="row table-content">
+        @{Html.RenderPartial("AHistoryTable");}
+        <div class="table-div col-md-2"></div>
+    </div>
+</div>
+
+

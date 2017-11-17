@@ -1,0 +1,22 @@
+﻿@model RAL_DAL.User
+
+@{
+    ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        setInvalidUrlPage();
+    });
+</script>
+<div class="container main-container"> 
+    <span id="uname-container" style="display:none">@Model.login.ToString()</span>
+    <br/ >
+    <div class="page-header">
+        <h2>An error occured!</h2>
+    </div>
+    <h3>You have requested an invalid URL</h3>
+    <br/ >
+    <a class="btn btn-primary btn-lg" href="@Url.Action("Start", "AHistory")">Return</a>
+</div>
+

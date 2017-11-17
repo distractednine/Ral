@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "LogOn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{Html.RenderPartial("LogOnScripts");}
+
+<div class="container"> 
+    <br>
+    <div class="text-center">
+        <div class="page-header">
+            <h2>Authorization</h2>
+        </div>
+        <h3>You need to log on or register for this service</h3>
+        <br/>
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#LogOn">Log On</button>
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Register">Register</button>
+     </div>
+    <br>
+ </div>
+  
+@{Html.RenderPartial("LogOnForm");}
+@{Html.RenderPartial("RegistrationForm");}

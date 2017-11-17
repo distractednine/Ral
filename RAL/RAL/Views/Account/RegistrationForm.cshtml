@@ -1,0 +1,80 @@
+﻿<!-- Modal -->
+<div class="modal fade bs-modal-sm" id="Register" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <br>
+            <div class="bs-example bs-example-tabs">
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active"><a href="#register" data-toggle="tab">Register</a></li>
+                    <li class=""><a href="#why" data-toggle="tab">Why?</a></li>
+                </ul>
+            </div>
+            <div class="modal-body">
+                <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in" id="why">
+                <p>We need this information so that you can receive access to the site and its content. Rest assured your information will not be sold, traded, or given to anyone.</p>
+                <p><br> Please contact <a href="mailto:distractednine@gmail.com">distractednine@gmail.com</a> for any other inquiries.</p>
+            </div>
+            <div class="tab-pane fade active in" id="register">
+                @using (Html.BeginForm("TryRegister", "Account"))
+                {
+                <fieldset>
+                <!-- Sign Up Form -->
+                <!-- Text input-->
+                <div class="control-group">
+                    <label class="control-label" for="Email">Email:</label>
+                    <div class="controls">
+                    <input id="_email" name="_email" class="form-control input-large" type="text">
+                    </div>
+                </div>
+            
+                <!-- Text input-->
+                <div class="control-group">
+                    <label class="control-label" for="userid">Login:</label>
+                    <div class="controls">
+                    <input id="_login" name="_login" class="form-control input-large" type="text">
+                    </div>
+                </div>
+            
+                <!-- Password input-->
+                <div class="control-group">
+                    <label class="control-label" for="password">Password:</label>
+                    <div class="controls">
+                    <input id="_pswd" name="_pswd" class="form-control input-large" type="password">
+                    <em>At least 6 Characters</em>
+                    </div>
+                </div>
+            
+                <!-- Text input-->
+                <div class="control-group">
+                    <label class="control-label" for="_reenterpassword">Re-Enter Password:</label>
+                    <div class="controls">
+                    <input id="_reenterpassword" class="form-control input-large" name="_reenterpassword" type="password">
+                    </div>
+                </div>
+            
+                <input type="hidden" id="_time" name="_time" value="@DateTime.Now" />
+
+                <!-- Error area -->
+                <span class="error" id="reg-error-message"></span>
+
+                <!-- Button -->
+                <div class="control-group">
+                    <label class="control-label" for="confirmsignup"></label>
+                    <div class="controls">
+                        <input type="submit" id="confirmsignup" name="confirmsignup" class="btn btn-primary" value="Sign Up"/>
+                    </div>
+                </div>
+                </fieldset>
+                }
+
+            </div>
+        
+            </div>
+            <div class="modal-footer text-center">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

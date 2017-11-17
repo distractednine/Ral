@@ -1,0 +1,11 @@
+﻿@model AHistoryViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PLANS</h2>
+
+<div class="row" style="height:37em">
+    @{Html.RenderPartial("~/Views/AHistory/ShowHistory.cshtml", Model.curList);}
+</div>

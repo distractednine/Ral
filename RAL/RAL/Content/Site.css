@@ -1,0 +1,109 @@
+﻿.page-header h2
+{
+    font-weight: bold;
+}
+.text-center
+{
+    text-align: center;
+}
+.text-right
+{
+    text-align: right;
+}
+.text-left
+{
+    text-align: left;
+}
+.self-center
+{
+    margin-left:auto;
+    margin-right:auto;
+}
+.error
+{
+    color: red;
+    font-weight:700;
+}
+.emphasis, .emphasis a
+{
+    color: rgb(14,169,66);
+}
+.logo
+{
+    height: 100px;
+}
+.no-border
+{
+    border:hidden;
+    border-radius:0px;
+}
+/*show dropdown on hover*/
+.dropdown:hover .dropdown-menu 
+{
+    display: block;
+}
+/*remove outlines from bootstrap buttons*/
+button, btn, .btn:focus, .btn:active
+{
+    outline: none;
+}
+.main-container 
+{
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+    width: 96%;
+}
+/*ahistory*/
+.table-header1
+{
+    background: rgb(122, 130, 136) linear-gradient(rgb(138, 145, 150), rgb(122, 130, 136) 60%, rgb(112, 120, 125)) no-repeat scroll 0% 0% / auto padding-box border-box;
+    color: rgb(233, 233, 255);
+}
+/*ahistory*/
+.round-corners 
+{
+    border-collapse:separate;
+    border:solid rgb(28, 30, 34) 1px;
+    border-radius:6px;
+    -moz-border-radius:6px;
+}
+/*tooltip*/
+.tooltip1 span { /* appearance */
+    background-color: rgba(0,0,0, 0.8);
+    border:solid rgb(122, 130, 136) 2px;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    margin-top: 30px;
+    margin-left: -60px;
+    margin-right: 0px;
+    opacity: 0; /* make it transparrent */
+    padding: 10px 25px 10px 25px;
+    position: absolute;
+    text-decoration: none;
+    visibility: hidden; /* hide it */
+    z-index: 10;
+}
+        
+.tooltip1:hover span { /* for hover show tooltip */
+    opacity: 1;
+    visibility: visible;
+}
+
+.notif-tooltip 
+{
+    border:solid rgb(122, 130, 136) 2px;
+    background-color: rgba(0,0,0, 0.8);
+    border-radius: 15px 15px 15px 15px;
+    color: #fff;
+	position: fixed;
+	height: auto;
+	top: 14.5%;
+    left: 4%;
+}
+.notif-tooltip a.close
+{
+    color: #fff;
+}
+

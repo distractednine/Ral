@@ -1,0 +1,68 @@
+﻿<script type="text/javascript">
+    $(function () {
+        $('form[action$="/DeleteWatcheda"]').validate({
+
+            submitHandler: function (form) {
+
+                var id2del = $('#a2del_id').val();
+                var name2del = $('#a2del_name').val();
+
+                $.ajax({
+                    url: '@Url.Action("DeleteWatcheda", "AHistory")',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        a2del_id: id2del
+                    }),
+                    datatype: 'json',
+                    processData: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+
+                        var notif;
+
+                        if (response == 'success') {
+                            deleteAHistoryTableRow(id2del);
+
+                            notif = "Anime <span class='emphasis'>" + name2del + "</span> has been removed from your watch history";
+                        }
+                        else if (response == 'error') {
+                            notif = "<span class='error'>Server error! Anime <span class='emphasis'>" + name2del +
+                                    "</span> has not been removed from your watch history</span>";
+                        }
+
+                        $('#DeleteWatcheda').modal('hide');
+
+                        addNotification(notif);
+
+                        //if deleted the last row in table - refresh
+                        if ($('#ahistory-table >tbody >tr').length == 0) {
+                            location.reload();
+                        }
+                    }
+                });
+
+            }
+
+        });
+    });
+</script>
+
+<!-- Modal -->
+<div class="modal fade bs-modal-sm" id="DeleteWatcheda" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete this anime from your watch history?</h4>
+      </div>
+      <div class="modal-body">
+            @using (Html.BeginForm("DeleteWatcheda", "AHistory"))
+            {
+                <input type="hidden" name="a2del_id" id="a2del_id" />
+                <input type="hidden" name="a2del_name" id="a2del_name" />
+                <input type="submit" class="btn btn-primary" value="Confirm" id="confirmDeleting"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+﻿<!-- Modal -->
+<div class="modal fade bs-modal-sm" id="LogOn" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        
+      <div class="modal-body">
+        <div class="tab-pane fade active in">
+            @using (Html.BeginForm("TryLogOn","Account"))
+            {
+            <fieldset>
+            <!-- Sign In Form -->
+            <!-- Text input-->
+            <div class="control-group">
+                <label class="control-label" for="login">Login:</label>
+                <div class="controls">
+                <input id="login" name="login" type="text" class="form-control input-medium">
+                </div>
+            </div>
+
+            <!-- Password input-->
+            <div class="control-group">
+                <label class="control-label" for="pswd">Password:</label>
+                <div class="controls">
+                <input id="pswd" name="pswd" class="form-control input-medium" type="password">
+                </div>
+            </div>
+
+            <!-- Multiple Checkboxes (inline) -->
+            <div class="control-group">
+                <!--<label class="control-label" for="rememberme"></label>-->
+                <div class="controls">
+                <label class="checkbox inline" for="rememberme">
+                    <input type="checkbox" name="rememberme" id="rememberme" value="Remember me">
+                    Remember me
+                </label>
+                </div>
+            </div>
+
+            <!-- Error area -->
+            <span class="error" id="error-message"></span>
+
+            <!-- Button -->
+            <div class="control-group">
+                <label class="control-label" for="signin"></label>
+                <div class="controls">
+                    <input type="submit" id="signin" name="signin" class="btn btn-primary" value="Log On"/>
+                </div>
+            </div>
+            </fieldset>
+            }
+        </div>
+        
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

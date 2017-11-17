@@ -1,0 +1,151 @@
+﻿<script type="text/javascript">
+    //fake 2del
+    function fakeQuickLogin() {
+        $('#login').attr('value', 'user02');
+        $('#pswd').attr('value', 'user02');
+    }
+
+    jQuery(function ($) {
+        setBigButtons();
+
+        //fake 2del
+        $('form[action$="Account/TryLogOn"] .error').first().append('<button class="btn btn-default" onclick=fakeQuickLogin()>fakeQuickLogin</button>');
+
+        $('form[action$="Account/TryLogOn"]').validate({
+
+            rules: {
+
+                login: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 16,
+                },
+
+                pswd: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 16,
+                },
+            },
+
+            messages: {
+
+                login: {
+                    required: "Please enter the login",
+                    minlength: "Login's length must be at least 6 characters",
+                    maxlength: "Login's length must be maximum 16 characters",
+                },
+
+                pswd: {
+                    required: "Please enter the password",
+                    minlength: "Password's length must be at least 6 characters",
+                    maxlength: "Password's length must be maximum 16 characters",
+                },
+
+            },
+
+            submitHandler: function (form) {
+
+                $.ajax({
+                    url: '@Url.Action("TryLogOn", "Account")',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        login: $('#login').val(),
+                        password: $('#pswd').val(),
+                        rememberme: $('#rememberme').is(':checked') ? 'true' : 'false'
+                    }),
+                    datatype: 'json',
+                    processData: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        if (data == '') {
+                            window.location = '/AHistory';
+                        }
+                        else {
+                            $('#error-message').html(data);
+                        }
+                    }
+                });
+            }
+        });
+
+        $('form[action$="/TryRegister"]').validate({
+
+            rules: {
+
+                _email: {
+                    email: true,
+                    required: true,
+                },
+
+                _login: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 16,
+                },
+
+                _pswd: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 16,
+                },
+
+                _reenterpassword: {
+                    required: true,
+                    equalTo: '#_pswd',
+                },
+            },
+
+            messages: {
+
+                _email: {
+                    email: "Please enter the correct email",
+                    required: "Please enter the email",
+                },
+
+                _login: {
+                    required: "Please enter the login",
+                    minlength: "Login's length must be at least 6 characters",
+                    maxlength: "Login's length must be maximum 16 characters",
+                },
+
+                _pswd: {
+                    required: "Please enter the password",
+                    minlength: "Password's length must be at least 6 characters",
+                    maxlength: "Password's length must be maximum 16 characters",
+                },
+
+                _reenterpassword: {
+                    required: "Please repeat the password",
+                    equalTo: "Please repeat the password correctly",
+                },
+
+            },
+
+            submitHandler: function (form) {
+
+                $.ajax({
+                    url: '@Url.Action("TryRegister", "Account")',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        login: $('#_login').val(),
+                        password: $('#_pswd').val(),
+                        regDate: $('#_time').val(),
+                        email: $('#_email').val()
+                    }),
+                    datatype: 'json',
+                    processData: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        if (data == '') {
+                            window.location = '/AHistory';
+                        }
+                        else {
+                            $('#reg-error-message').html(data);
+                        }
+                    }
+                });
+            }
+        });
+    })
+</script>

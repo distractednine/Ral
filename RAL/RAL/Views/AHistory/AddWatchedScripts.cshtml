@@ -1,0 +1,355 @@
+﻿<script type="text/javascript">
+    function setAddWatcheda() {
+        $('#aname').css('width', '30em');
+        $('#waid').css('width', '7.5em');
+        $('#atype').css('width', '7.5em');
+        $('#aseasonnum').css('width', '5em');
+        $('#aepcount').css('width', '5em');
+        $('#atimewatched').css('width', '5em');
+        $('#awatchstatus').css('width', '9em');
+        $('#adroppedep').css('width', '5em');
+        $('#auserrating').css('width', '5em');
+        $('#datetimepicker1').parent().css('width', '14.5em');
+        $('#datetimepicker2').parent().css('width', '14.5em');
+        $('#addWatcheda').css('width', '7em');
+        $('.btn-default').first().css('width', '7em');
+        $('#getWAbtn').prop('disabled', true);
+
+        curOrFinState();
+    }
+
+    function curOrFinState() {
+        $('#droppeddiv').css('display', 'none');
+        $('#timewatcheddiv').css('display', 'none');
+    }
+
+    function droppedState() {
+        $('#droppeddiv').css('display', 'inline');
+        $('#timewatcheddiv').css('display', 'none');
+    }
+
+    function rewatchedState() {
+        $('#droppeddiv').css('display', 'none');
+        $('#timewatcheddiv').css('display', 'inline');
+    }
+
+    function resetAddWatchedForm() {
+        $('form[action$="/AddWatcheda"] input:text').val('');
+        $('#atype').val('TV');
+        $('#aseasonnum').val('1');
+        $('#awatchstatus').val('Current');
+        $('#atype').change();
+        $('#awatchstatus').change();
+        $('#waid').change();
+    }
+
+    function testWAparsing() {
+        $('#getWAbtn').prop('disabled', false);
+        $('#ayear').attr('value', 0);
+        var target = $('.modal-footer :nth-child(1) :nth-child(1)');
+        target.append('<button onclick="testFunction()" style="width:10em;color:red"">test WA Parsing</button>');
+    }
+
+    function testFunction() {
+        var randNumb = parseInt(Math.random() * 3000,10);
+        $('#waid').attr('value', randNumb);
+        $('#waid').change();
+
+        /*
+        var time = new Date();
+        var date = time.getDate();
+        var hour = time.getHours()
+        var minutes = time.getMinutes();
+        $('#datetimepicker1').parent().attr('value', date + ' ' + hour + ':' + minutes);
+        */
+
+        var attemptNumb = parseInt($('#ayear').val(), 10);
+        attemptNumb++;
+        $('#ayear').attr('value', attemptNumb);
+
+        $('#getWAbtn').click();
+    }
+
+    $(function () {
+        setAddWatcheda();
+        
+        //testWAparsing();
+        
+        $.validator.addMethod("datetime",
+            function (value, element) {
+                return value.match(/^$|^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d ([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
+            },
+            "Please enter a date in the format!"
+        );
+        
+        $('#datetimepicker1, #datetimepicker2').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm'
+        });
+
+        // hide server error message after textbox was changed
+        $('input[type=text]').change(function () {
+            $('#error-message').html('');
+        });
+
+        $('#awatchstatus').on('change', function () {
+            if (this.value == 'Dropped') {
+                droppedState();
+            }
+            else if (this.value == 'Rewatched') {
+                rewatchedState();
+            }
+            else {
+                curOrFinState();
+            }
+        });
+
+        $('#atype').on('change', function () {
+            if (this.value == 'Movie') {
+                $('#epcountdiv').css('display', 'none');
+            }
+            else {
+                $('#epcountdiv').css('display', 'inline');
+            }
+        });
+
+        // restart date inputs validation 
+        $('.input-group-addon').click(function () {
+            $('#astartedtime').next().focus();
+            $('#afinishedtime').next().focus();
+        });
+
+        $("#waid").mouseout(function () {
+            $(this).change();
+        });
+
+        $('#waid').change(function () {
+            var waid = $(this).val();
+            if (waid.length > 0 && $.isNumeric(waid) && waid > 0 && waid % 1 === 0) {
+                $('#getWAbtn').prop('disabled', false);
+            }
+            else {
+                $('#getWAbtn').prop('disabled', true);
+            }
+        });
+
+        $('#getWAbtn').click(function (e) {
+
+            e.preventDefault()
+
+            $.ajax({
+                url: '@Url.Action("GetInfoFromWA", "AHistory")',
+                type: 'POST',
+                data: JSON.stringify({
+                    worldartID: $('#waid').val(),
+                }),
+                datatype: 'json',
+                processData: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (anime) {
+                    if (anime == 'error') {
+                        alert('World art parsing error!');
+                        $("label.error").hide();
+
+                        var url = "http://www.world-art.ru/animation/animation.php?id=" + $('#waid').val();
+                        window.open(url, '_blank');
+                    }
+                    else {
+                        var _waid = $('#waid').val();
+                        $('form').trigger('reset');
+
+                        $('#waid').attr('value', _waid);
+                        $('#aname').attr('value', anime.name);
+                        $('#ayear').attr('value', anime.year);
+                        $('#aepcount').attr('value', anime.epcount);
+
+                        switch (anime.type) {
+                            case ('TV'): $('#atype').val('TV'); break;
+                            case ('OVA'): $('#atype').val('OVA'); break;
+                            case ('Movie'): $('#atype').val('Movie'); break;
+                        }
+
+                        // remove validation messages
+                        $('#atype').change();
+                        $('#awatchstatus').change();
+                        $('form').valid();
+                        $("label.error").hide();
+                    }
+                }
+            });
+        });
+
+        $('form[action$="/AddWatcheda"]').validate({
+
+            rules: {
+                
+                aname: {
+                    required: true,
+                },
+
+                ayear: {
+                    required: true,
+                    range: [1900, 2050],
+                },
+
+                waid: {
+                    range: [1, 999999],
+                },
+
+                aseasonnum: {
+                    required: true,
+                    range: [1, 999],
+                },
+
+                aepcount: {
+                    required: true,
+                    range: [1, 9999],
+                },
+
+                atimewatched: {
+                    range: [1, 9999],
+                },
+
+                adroppedep: {
+                    range: [1, 9999],
+                },
+
+                auserrating: {
+                    range: [0, 10],
+                },
+                
+                astartedtime: {
+                    required: true,
+                    datetime: true,
+                },
+                
+                afinishedtime: {
+                    datetime: true,
+                },
+            },
+
+            messages: {
+                
+                aname: {
+                    required: "Necessary filed",
+                },
+
+                ayear: {
+                    required: "Necessary filed",
+                    range: "Incorrect year",
+                },
+
+                waid: {
+                    range: "Incorrect id",
+                },
+
+                aseasonnum: {
+                    required: "Necessary filed",
+                    range: "Incorrect value (integer is required)",
+                },
+
+                aepcount: {
+                    required: "Necessary filed",
+                    range: "Incorrect value (integer is required)",
+                },
+
+                atimewatched: {
+                    range: "Incorrect value (integer is required)",
+                },
+
+                adroppedep: {
+                    range: "Incorrect value (integer is required)",
+                },
+
+                auserrating: {
+                    range: "Incorrect value (0.0-10.0 is required)",
+                },
+                
+                astartedtime: {
+                    required: "Necessary filed",
+                    datetime: "Incorrect date/time",
+                },
+                
+                afinishedtime: {
+                    datetime: "Incorrect date/time",
+                },
+
+            },
+
+            submitHandler: function (form) {
+
+                var name2add = $('#aname').val();
+                var startdate2add = $('#astartedtime').val();
+
+                $.ajax({
+                    url: '@Url.Action("AddWatcheda", "AHistory")',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        name: $('#aname').val(),
+                        year: $('#ayear').val(),
+                        type: $('#atype').val(),
+                        seasonnum: $('#aseasonnum').val(),
+                        epcount: $('#aepcount').val(),
+                        waid: $('#waid').val(),
+                        startdate: $('#astartedtime').val(),
+                        finishdate: $('#afinishedtime').val(),
+                        rtng: $('#auserrating').val(),
+                        watchedtime: $('#atimewatched').val(),
+                        epdropped: $('#adroppedep').val(),
+                        adddate: $('#aaddate').val(),
+                        status: $('#awatchstatus').val(),
+                    }),
+                    datatype: 'json',
+                    processData: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        if (data == '') {
+
+                            var notif = '';
+                            var location = '';
+
+                            $.ajax({
+                                url: '@Url.Action("AHistoryTableRow", "AHistory")',
+                                type: 'POST',
+                                data: JSON.stringify({
+                                    a2get_name: name2add,
+                                    a2get_startdate: startdate2add,
+                                }),
+                                datatype: 'json',
+                                processData: false,
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (response) {
+                                    if (response == 'error') {
+                                        notif = "<span class='error'>Server error! Anime <span class='emphasis'>" + name2add +
+                                            "</span> has not been added to your watch history</span>";
+                                    }
+                                    else if (!redirectToAnotherAHistoryTable(response)) {
+                                        addAHistoryTableRow(response, startdate2add);
+
+                                        notif = "Anime <span class='emphasis'>" + name2add + "</span> has been added to your watch history";
+                                        location = '#emphasis';
+                                        addEmphasis(name2add, startdate2add);
+                                    }                                        
+
+                                    $('#AddAHistory').modal('hide');
+                                    resetAddWatchedForm();
+
+                                    if (notif != '') {
+                                        addNotification(notif);
+                                    }
+
+                                    if (location != '') {
+                            	        scrollToAHistoryTableRow(location);
+                            	    }
+                                }
+                            });
+                        }
+                        else {
+                            $('#error-message').html(data);
+                        }
+                    }
+                });
+            }
+        });
+            
+    });
+</script>

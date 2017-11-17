@@ -1,0 +1,94 @@
+﻿@model RAL_DAL.Watcheda
+
+@{
+    Layout = null;
+}
+
+<tr>
+    <td></td>
+    <td class="aname-td">
+        @if (Model.anime.waid != null)
+        {
+            <a href="@string.Concat("http://www.world-art.ru/animation/animation.php?id=", Model.anime.waid)">@Model.anime.name</a>
+        }
+        else
+        {
+            @Model.anime.name
+        }
+    </td>
+    <td>
+        @if (Model.anime.seasonnum < 2)
+        {
+            @Model.anime.type
+        }
+        else
+        {
+            <span>@Model.anime.type @Model.anime.seasonnum</span>
+        }
+    </td>
+    <td>
+        @Model.anime.year
+    </td>
+
+    <td>
+        @Model.anime.epcount
+    </td>
+    <td>
+        @Model.startdate
+    </td>
+    <td>
+        @Model.finishdate
+    </td>
+    <td>
+        @Model.rating.ToString().Replace(',','.')
+    </td>
+    <td id="astatus-td">
+        @if (Model.status == "Rewatched")
+        {
+            if (@Model.watchedtime != null)
+            {
+                <span>@Model.status @Model.watchedtime time</span>
+            }
+            else
+            {
+                <span>@Model.status</span> 
+            }
+        }
+        else if (Model.status == "Dropped")
+        {
+            if (@Model.epdropped != null)
+            {
+                <span>@Model.status on @Model.epdropped ep</span>   
+            }
+            else
+            {
+                <span>@Model.status</span> 
+            }
+        }   
+        else
+        {
+            @Model.status
+        }
+    </td>
+    <td>
+        <div class="options-td">
+            <span class="aid-hid">@Model.id</span>
+            <span class="aname-hid">@Model.anime.name</span>
+
+            <a class="tooltip1" href="#">
+                <button class="badge" data-toggle="modal" data-target="#AddAHistory"><i class="glyphicon glyphicon-pencil"></i></button>
+                <span>Edit</span>
+            </a>
+
+            <a class="tooltip1" href="#">
+                <button class="badge delete-watcheda" data-toggle="modal" data-target="#DeleteWatcheda"><i class="glyphicon glyphicon-remove"></i></button>
+                <span>Delete</span>
+            </a>
+
+            <a class="tooltip1" href="#">
+                <button class="badge" data-toggle="modal" data-target=""><i class="glyphicon glyphicon-star-empty"></i></button>
+                <span>Rate</span>
+            </a>
+        </div>
+    </td>
+</tr>
